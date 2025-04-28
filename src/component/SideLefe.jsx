@@ -52,7 +52,9 @@ const SideLefe = () => {
               { name: "Users", path: "/users" },
               { name: "Products", path: "/products" },
               { name: "Orders", path: "/orders" },
-              { },
+              { name: "Payments", path: "/payments" },
+              { name: "Settings", path: "/settings" },
+              { name: "Logout", path: "/logout" },
             ].map((item) => (
               <li key={item.path}>
                 <Link

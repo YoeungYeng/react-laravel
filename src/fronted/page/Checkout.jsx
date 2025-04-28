@@ -6,10 +6,13 @@ import { useForm } from "react-hook-form";
 import { apiUrl, userToken } from "../../component/htpds";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"; // Import PayPal SDK
+import PayPalCheckout from "../components/PayPalCheckout";
 
 function Checkout() {
   const { cart, subTotal, grandTotal, shipping } = useContext(CartContext);
   const [disable, setDisable] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("credit_card"); // Track payment method
   const navigate = useNavigate();
 
   const {
@@ -19,7 +22,9 @@ function Checkout() {
   } = useForm();
 
   const processOrder = async (data) => {
-    await saveOrder(data, "no paid");
+    if (paymentMethod === "credit_card") {
+      await saveOrder(data, "no paid");
+    }
   };
 
   const saveOrder = async (formData, paymentStatus) => {
@@ -82,64 +87,14 @@ function Checkout() {
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-3">Shipping Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Name */}
-                <InputField
-                  label="Name"
-                  name="name"
-                  register={register}
-                  required
-                  error={errors.name}
-                />
-                {/* Email */}
-                <InputField
-                  label="E-mail"
-                  name="email"
-                  type="email"
-                  register={register}
-                  required
-                  error={errors.email}
-                />
-                {/* Address */}
-                <InputField
-                  label="Address"
-                  name="address"
-                  register={register}
-                  required
-                  error={errors.address}
-                />
-                {/* City */}
-                <InputField
-                  label="City"
-                  name="city"
-                  register={register}
-                  required
-                  error={errors.city}
-                />
-                {/* Province */}
-                <InputField
-                  label="State / Province"
-                  name="province"
-                  register={register}
-                  required
-                  error={errors.province}
-                />
-                {/* Zip */}
-                <InputField
-                  label="Zip / Postal Code"
-                  name="zip"
-                  register={register}
-                  required
-                  error={errors.zip}
-                />
-                {/* Mobile */}
+                <InputField label="Name" name="name" register={register} required error={errors.name} />
+                <InputField label="E-mail" name="email" type="email" register={register} required error={errors.email} />
+                <InputField label="Address" name="address" register={register} required error={errors.address} />
+                <InputField label="City" name="city" register={register} required error={errors.city} />
+                <InputField label="State / Province" name="province" register={register} required error={errors.province} />
+                <InputField label="Zip / Postal Code" name="zip" register={register} required error={errors.zip} />
                 <div className="md:col-span-2">
-                  <InputField
-                    label="Mobile"
-                    name="mobile"
-                    register={register}
-                    required
-                    error={errors.mobile}
-                  />
+                  <InputField label="Mobile" name="mobile" register={register} required error={errors.mobile} />
                 </div>
               </div>
             </div>
@@ -148,19 +103,47 @@ function Checkout() {
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-3">Payment Information</h2>
               <div className="space-y-3">
+                {/* Choose Payment Method */}
                 <div>
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Payment Method
                   </label>
-                  <select className="shadow border rounded w-full py-2 px-3 text-gray-700">
-                    <option>Credit Card</option>
+                  <select
+                    className="shadow border rounded w-full py-2 px-3 text-gray-700"
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  >
+                    <option value="credit_card">Credit Card</option>
+                    <option value="paypal">PayPal</option>
                   </select>
                 </div>
-                <InputField label="Card Number" />
-                <div className="grid grid-cols-2 gap-4">
-                  <InputField label="Expiry Date" placeholder="MM/YY" />
-                  <InputField label="CVV" />
-                </div>
+
+                {/* PayPal Button */}
+                {paymentMethod === "paypal" && (
+                  <div className="pt-4">
+                    <PayPalCheckout>
+                      <PayPalButtons
+                        style={{ layout: "vertical" }}
+                        createOrder={(data, actions) => {
+                          return actions.order.create({
+                            purchase_units: [{ amount: { value: grandTotal().toString() } }],
+                          });
+                        }}
+                        onApprove={(data, actions) => {
+                          return actions.order.capture().then(async function (details) {
+                            toast.success(`Transaction completed by ${details.payer.name.given_name}`);
+                            const formData = {}; // Collect necessary form data here if needed
+                            await saveOrder(formData, "paid");
+                          });
+                        }}
+                        onError={(err) => {
+                          console.error(err);
+                          toast.error("PayPal Checkout failed. Try again.");
+                        }}
+                      />
+                    </PayPalCheckout>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -174,15 +157,16 @@ function Checkout() {
               </ul>
             </div>
 
-            <button
-              type="submit"
-              className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded w-full ${
-                disable ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              disabled={disable}
-            >
-              {disable ? "Placing Order..." : "Place Order"}
-            </button>
+            {/* Submit Button (Only for Credit Card) */}
+            {paymentMethod === "credit_card" && (
+              <button
+                type="submit"
+                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded w-full ${disable ? "opacity-50 cursor-not-allowed" : ""}`}
+                disabled={disable}
+              >
+                {disable ? "Placing Order..." : "Place Order"}
+              </button>
+            )}
           </div>
         </div>
       </form>

@@ -12,7 +12,6 @@ const Shop = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [catCheck, setCatCheck] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState("");
@@ -21,10 +20,7 @@ const Shop = () => {
   const handleAddToCart = (product) => {
     addToCart(product);
   };
-  // Function to handle search input change
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
+ 
 
   // category filter
   const handleCategoryChange = (e) => {

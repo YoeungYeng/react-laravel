@@ -172,7 +172,7 @@ const ConfirmThank = () => {
               {/* Track Order Button */}
               <div className="text-center">
                 <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-full">
-                  Track Your Order
+                  Track Your Payment
                 </button>
               </div>
             </>
