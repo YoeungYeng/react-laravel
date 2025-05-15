@@ -38,12 +38,12 @@ const SideLefe = () => {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
-          <a href="#" className="flex items-center ps-2.5 mb-5">
+          <Link to={"/"} className="flex items-center ps-2.5 mb-5">
             <img src={logo} className="h-6 me-3 sm:h-7" alt="Logo" />
             <span className="self-center text-xl font-semibold dark:text-white">
               Small Team
             </span>
-          </a>
+          </Link>
           <ul className="space-y-2 font-medium">
             {[
               { name: "Dashboard", path: "/" },

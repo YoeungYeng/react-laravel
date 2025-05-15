@@ -43,18 +43,7 @@ const Navbar = () => {
     .toFixed(2);
   const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0); // Use item.quantity
 
-  // Function to remove an item if quantity reaches 0 (This logic might be redundant now handled in decreaseQty)
-  // const handleRemoveIfEmpty = (id) => {
-  //   const itemToRemove = cart.find((item) => item.id === id);
-  //   if (itemToRemove && itemToRemove.quantity <= 0) { // Use item.quantity
-  //     removeFromCart(id);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // Call handleRemoveIfEmpty after a quantity change (you might need to adjust the timing)
-  //   cart.forEach((item) => handleRemoveIfEmpty(item.id));
-  // }, [cart]);
+ 
 
   return (
     <>

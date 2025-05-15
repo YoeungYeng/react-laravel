@@ -1,27 +1,103 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import SideLefe from "../components/SideLefe";
 import Footer from "../components/Footer";
 import { useForm } from "react-hook-form";
+import { apiUrl, userToken } from "../../component/htpds";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const [profile, setProfile] = useState([]);
+  const [disable, setDisable] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+    reset,
+  } = useForm({
+    defaultValues: async () => {
+      try {
+        // setDisable(true);
+
+        const response = await fetch(`${apiUrl}/account/user`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${userToken()}`,
+          },
+          body: JSON.stringify(),
+          credentials: "include",
+        });
+
+        const result = await response.json();
+        console.log(result);
+        // setDisable(false);
+        if (result.status === 200) {
+          setProfile(result.data);
+          reset({
+            name: result.data.name,
+            email: result.data.email,
+            address: result.data.address,
+            mobile: result.data.mobile,
+            city: result.data.city,
+            zip: result.data.zip,
+            country: result.data.country,
+          });
+        }
+      } catch (error) {
+        console.error("Submission Error:", error);
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    },
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      
+      setDisable(true);
+      console.log(data);
+      const response = await fetch(`${apiUrl}/account/updateprofile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${userToken()}`,
+        },
+        body: JSON.stringify(data),
+        credentials: "include",
+      });
+
+      const result = await response.json();
+      console.log(result);
+      setDisable(false);
+      if (result.status === 200) {
+        toast.success("profile created successfully " + result.data);
+        navigate("/account/dashboard");
+      } else {
+        toast.error(result.message || "profile creation failed.");
+      }
+    } catch (error) {
+      console.error("Submission Error:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+    }
+  };
   return (
     <>
       {/* navbar */}
-      <Navbar />
+
       {/* aside */}
-      <SideLefe />
+
       <div className="-mt-2 sm:ml-64">
+        <SideLefe />
+        <Navbar />
         <div className="p-4 rounded-lg dark:border-gray-700">
           <div className="flex items-center justify-center mb-4 rounded-sm bg-gray-50">
             <div className="relative w-full overflow-x-auto shadow-md">
               <form
-                // onSubmit={handleSubmit(onSubmit)} // Fixed form submission handler
+                onSubmit={handleSubmit(onSubmit)} // Fixed form submission handler
                 className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
               >
                 <div className="mb-4 flex gap-2 items-center">
@@ -75,6 +151,10 @@ const Profile = () => {
                     name=""
                     rows={5}
                     cols={20}
+                    placeholder="Address"
+                    {...register("address", {
+                      required: "Address is required",
+                    })}
                     className="w-full outline-none border-gray-500 border"
                   ></textarea>
                 </div>
@@ -87,15 +167,15 @@ const Profile = () => {
                   </label>
                   <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    placeholder="Name"
-                    {...register("name", {
-                      required: "Name is required",
+                    type="number"
+                    placeholder="Phone"
+                    {...register("mobile", {
+                      required: "phone is required",
                     })}
                   />
-                  {errors.name && (
+                  {errors.mobile && (
                     <p className="text-red-500 text-xs italic mt-2">
-                      {errors.name.message}
+                      {errors.mobile.message}
                     </p>
                   )}
                   <label
@@ -138,30 +218,34 @@ const Profile = () => {
                       {errors.name.message}
                     </p>
                   )}
-                  <select
-                    {...register("status", {
-                      required: "Please select a status",
-                    })}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  <label
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="name"
                   >
-                    <option value="">Select Status</option>
-                    <option value={1}>Active</option>
-                    <option value={0}>Inactive</option>
-                  </select>
-                  {errors.status && (
+                    Country
+                  </label>
+                  <input
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                    placeholder="country"
+                    {...register("country", {
+                      required: "country is required",
+                    })}
+                  />
+                  {errors.country && (
                     <p className="text-red-500 text-xs italic mt-2">
-                      {errors.status.message}
+                      {errors.country.message}
                     </p>
                   )}
                 </div>
 
                 <div className="mb-4">
                   <button
-                    // disabled={disable}
+                    disabled={disable}
                     type="submit"
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >
-                    Create
+                    Update Profile
                   </button>
                 </div>
               </form>

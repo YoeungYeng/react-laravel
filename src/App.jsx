@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import { default as AccountLogin } from "./fronted/page/Login";
 import { default as AccountRegister } from "./fronted/page/Register";
+import { default as Order } from "./fronted/page/Orders";
 import { AdminRequireAuth } from "./context/AdminRequireAuth";
 import Create from "./cantories/Create";
 import { ToastContainer } from "react-toastify";
@@ -30,6 +31,8 @@ import Checkout from "./fronted/page/Checkout";
 import Profile from "./fronted/page/Profile";
 import Cart from "./fronted/page/Cart";
 import OrderDetail from "./orders/OrderDetail";
+import Payment from "./fronted/page/Payment";
+import ChangePassword from "./fronted/page/ChangePassword";
 
 function App() {
   return (
@@ -63,7 +66,7 @@ function App() {
           />
           <Route path="/account/login" element={<AccountLogin />} />
           <Route path="/account/register" element={<AccountRegister />} />
-          
+
           {/* for user */}
           <Route
             path="/account/dashboard"
@@ -74,12 +77,44 @@ function App() {
               </UserRequireAuth>
             }
           />
+          <Route
+            path="/payment"
+            element={
+              <UserRequireAuth>
+                {" "}
+                <Payment/>{" "}
+              </UserRequireAuth>
+            }
+          />
+          {/* order */}
+          <Route path="/account/order" element={
+              <UserRequireAuth>
+                <Order />
+              </UserRequireAuth>
+            } />
+          {/* change password */}
+          <Route
+            path="/account/changepassword"
+            element={
+              <UserRequireAuth>
+                <ChangePassword />
+              </UserRequireAuth>
+            }
+            />
           {/* cart page
           {/* -------------------------------------------------- */}
           {/* login */}
           <Route path="/login" element={<Login />} />
           {/* cart */}
-          <Route path="account/cart" element={<Cart />} />
+          <Route
+            path="account/cart"
+            element={
+              <UserRequireAuth>
+                <Cart />
+              </UserRequireAuth>
+            }
+          />
+
           {/* dashboard for admin */}
           <Route
             path="/"

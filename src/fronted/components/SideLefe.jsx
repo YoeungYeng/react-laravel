@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import logo from "../../assets/react.svg";
+import logo from "../../assets/elogo.png";
 import { AuthUserContext } from "../../context/AuthUser";
 
 const SideLefe = () => {
@@ -30,6 +30,7 @@ const SideLefe = () => {
             d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
           ></path>
         </svg>
+       
       </button>
 
       {/* Sidebar */}
@@ -39,7 +40,7 @@ const SideLefe = () => {
         } sm:translate-x-0`}
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto">
+        <div className="  px-3 py-4 overflow-y-auto">
           <Link to="/" className="flex items-center ps-2.5 mb-5">
             <img src={logo} className="h-6 me-3 sm:h-7" alt="Logo" />
             <span className="self-center text-xl font-semibold dark:text-white">
@@ -48,7 +49,7 @@ const SideLefe = () => {
           </Link>
           <ul className="space-y-2 font-medium">
             {[
-              { name: "My Account", path: "/account/myaccount" },
+              { name: "My Account", path: "/account/dashboard" },
               { name: "Orders", path: "/account/order" },
               { name: "Change Password", path: "/account/changepassword" },
               { name: "Logout", path: "/account/logout", onClick: logout }, // Added onClick handler

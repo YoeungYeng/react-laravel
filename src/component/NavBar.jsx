@@ -1,24 +1,36 @@
 import React, { useContext, useState } from "react";
 import logo from "../assets/elogo.png";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 const NavBar = () => {
   const { logout } = useContext(AuthContext);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  // fetch api user
+  const fetchUser = async () => {
+    const response = await fetch("https://api.example.com/user", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const data = await response.json();
+    return data;
+  }
   return (
     <>
       <nav className=" border-gray-200  w-full">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a
-            href="https://flowbite.com/"
+          <Link
+            to="/"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <img src={logo} className="h-8" alt="Flowbite Logo" />
             <span className="self-center text-2xl font-semibold whitespace-nowrap ">
               Small Team
             </span>
-          </a>
+          </Link>
           <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <button
               type="button"

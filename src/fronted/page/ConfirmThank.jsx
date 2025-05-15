@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { apiUrl, userToken } from "../../component/htpds";
 
 const ConfirmThank = () => {
@@ -169,12 +169,14 @@ const ConfirmThank = () => {
                 </div>
               </div>
 
-              {/* Track Order Button */}
+              {/* Track Order Button
               <div className="text-center">
+                <Link to={"/payment"}>
                 <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-full">
                   Track Your Payment
                 </button>
-              </div>
+                </Link>
+              </div> */}
             </>
           )}
         </div>
