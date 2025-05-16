@@ -50,6 +50,7 @@ const SideLefe = () => {
               { name: "Categories", path: "/categories" },
               { name: "Brands", path: "/brands" },
               { name: "Users", path: "/users" },
+              { name: "slide", path: "/slides" },
               { name: "Products", path: "/products" },
               { name: "Orders", path: "/orders" },
               { name: "Payments", path: "/payments" },

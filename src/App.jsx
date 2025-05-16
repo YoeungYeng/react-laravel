@@ -33,7 +33,10 @@ import Cart from "./fronted/page/Cart";
 import OrderDetail from "./orders/OrderDetail";
 import Payment from "./fronted/page/Payment";
 import ChangePassword from "./fronted/page/ChangePassword";
-
+import Favorite from "./fronted/page/Favorite";
+import { default as  ShowSlides} from "./pages/Slides";
+import { default as CreateSlides } from "./slides/Create";
+import { default as UpdateSlides } from "./slides/Update";
 function App() {
   return (
     <>
@@ -101,6 +104,7 @@ function App() {
               </UserRequireAuth>
             }
             />
+          <Route path="/account/favorite" element={<Favorite />} />
           {/* cart page
           {/* -------------------------------------------------- */}
           {/* login */}
@@ -121,6 +125,31 @@ function App() {
             element={
               <AdminRequireAuth>
                 <Dashboard />
+              </AdminRequireAuth>
+            }
+          />
+          {/* slide show */}
+          <Route
+            path="/slides"
+            element={
+              <AdminRequireAuth>
+                <ShowSlides />
+              </AdminRequireAuth>
+            }
+          />
+          <Route
+            path="/slides/:id"
+            element={
+              <AdminRequireAuth>
+                <CreateSlides />
+              </AdminRequireAuth>
+            }
+          />
+          <Route
+            path="/slides/:id"
+            element={
+              <AdminRequireAuth>
+                <UpdateSlides />
               </AdminRequireAuth>
             }
           />

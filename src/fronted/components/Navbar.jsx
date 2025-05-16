@@ -3,6 +3,8 @@ import { Link, NavLink } from "react-router-dom";
 import { ShoppingCart, Menu, X, Plus, Minus } from "lucide-react";
 import { CartContext } from "../../context/Cart"; // Assuming you have a CartContext
 import { FaUser } from "react-icons/fa";
+import { MdFavorite } from "react-icons/md";
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -85,6 +87,9 @@ const Navbar = () => {
                 {totalQuantity}
               </span>
             </button>
+            <NavLink className={navLinkClass} to={'/account/favorite'}>
+              <MdFavorite />
+            </NavLink>
             <NavLink className={navLinkClass} to={'/account/dashboard'}>
               <FaUser />
             </NavLink>
