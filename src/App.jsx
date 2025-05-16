@@ -138,13 +138,14 @@ function App() {
             }
           />
           <Route
-            path="/slides/:id"
+            path="/slides/create"
             element={
               <AdminRequireAuth>
                 <CreateSlides />
               </AdminRequireAuth>
             }
           />
+          
           <Route
             path="/slides/:id"
             element={
