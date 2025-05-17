@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Loading from "../component/Loading";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { adminToken, apiUrl } from "../component/htpds";
+import { toast } from "react-toastify";
 
 const Show = () => {
   const [slide, setSlide] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const navigator = useNavigate();
   const fetchSlide = async () => {
     try {
       setLoading(true);
@@ -35,6 +37,37 @@ const Show = () => {
   useEffect(() => {
     fetchSlide();
   }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`${apiUrl}/slides/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${adminToken()}`, // Make sure adminToken() returns a valid string
+        },
+      });
+
+      if (!response.ok) {
+        let errorMessage = "Failed to delete slide";
+        try {
+          const data = await response.json();
+          errorMessage = data.message || errorMessage;
+        } catch (e) {
+          console.warn("Failed to parse JSON error response", e);
+        }
+        throw new Error(errorMessage);
+      }
+
+      toast.success("Slide deleted successfully");
+      navigator("/slides"); // Redirect to slide list page
+      
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("Error deleting slide: " + error.message);
+    }
+  };
 
   return (
     <div className="relative w-full shadow-md sm:rounded-lg">
@@ -84,7 +117,9 @@ const Show = () => {
                     <span className="text-white p-2 block">{item.title}</span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-white p-2 block">{item.subtitle}</span>
+                    <span className="text-white p-2 block">
+                      {item.subtitle}
+                    </span>
                   </td>
                   <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-800">
                     {item.image ? (
@@ -98,7 +133,9 @@ const Show = () => {
                     )}
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-white p-2 block">{item.created_at}</span>
+                    <span className="text-white p-2 block">
+                      {item.created_at}
+                    </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Link
@@ -107,11 +144,10 @@ const Show = () => {
                     >
                       Edit
                     </Link>
-                    <Link
-                      to="#"
-                      className="font-medium text-red-600 dark:text-red-500 ml-3 hover:underline"
-                    >
-                      Delete
+                    <Link className="font-medium text-red-600 dark:text-red-500 ml-3 hover:underline">
+                      <button onClick={() => handleDelete(item.id)}>
+                        Delete
+                      </button>
                     </Link>
                   </td>
                 </tr>

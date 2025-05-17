@@ -154,6 +154,14 @@ function App() {
               </AdminRequireAuth>
             }
           />
+          <Route
+            path="/slides/:id"
+            element={
+              <AdminRequireAuth>
+                <ShowSlides />
+              </AdminRequireAuth>
+            }
+          />
           {/* category */}
           <Route
             path="/categories"

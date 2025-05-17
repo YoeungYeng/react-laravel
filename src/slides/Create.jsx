@@ -82,7 +82,7 @@ const Create = () => {
 
           <div className="flex items-center justify-center mb-4 rounded-sm bg-gray-50">
             <div className="relative w-full overflow-x-auto shadow-md">
-              <Link to={`/products`}>
+              <Link to={`/slides`}>
                 <button className="bg-blue-700 p-2 hover:bg-blue-500 rounded-sm w-[100px] text-white mb-4">
                   Back
                 </button>
