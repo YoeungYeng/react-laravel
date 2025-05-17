@@ -124,7 +124,7 @@ const Create = () => {
                     placeholder="Sub Title"
                     {...register("subtitle", { required: "Price is required" })}
                   />
-                  {errors.subTitle && (
+                  {errors.subtitle && (
                     <p className="text-red-500 text-xs italic mt-2">
                       {errors.subtitle.message}
                     </p>

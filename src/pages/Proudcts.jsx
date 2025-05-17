@@ -9,12 +9,12 @@ const Proudcts = () => {
     <>
       <SideLefe />
       {/* container */}
-      <div class="h-screen  sm:ml-64 "  
+      <div className="h-screen  sm:ml-64 "  
       >
-        <div class="p-4  rounded-lg dark:border-gray-700">
-          <div class=" gap-4 mb-4">
-            <div class="rounded-sm bg-gray-50 dark:bg-gray-800">
-              <p class="text-2xl text-gray-400 dark:text-gray-500">
+        <div className="p-4  rounded-lg dark:border-gray-700">
+          <div className=" gap-4 mb-4">
+            <div className="rounded-sm bg-gray-50 dark:bg-gray-800">
+              <p className="text-2xl text-gray-400 dark:text-gray-500">
                 {/* navbar */}
                 <NavBar />
               </p>
@@ -22,7 +22,7 @@ const Proudcts = () => {
           </div>
 
          
-          <div class="flex items-center justify-center mb-4 rounded-sm " >
+          <div className="flex items-center justify-center mb-4 rounded-sm " >
             <ShowProduct />
           </div>
           

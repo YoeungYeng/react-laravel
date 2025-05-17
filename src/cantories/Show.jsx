@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { adminToken, apiUrl } from "../component/htpds";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "../component/Loading";
+import { toast } from "react-toastify";
 
 const Show = () => {
   // Set categories
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const navigator = useNavigate();
   // Fetch categories API
   const fetchCategories = async () => {
     try {
@@ -40,6 +41,36 @@ const Show = () => {
     fetchCategories();
   }, []);
 
+  const handleDelete = async (id) => {
+      try {
+        const response = await fetch(`${apiUrl}/categories/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${adminToken()}`, // Make sure adminToken() returns a valid string
+          },
+        });
+  
+        if (!response.ok) {
+          let errorMessage = "Failed to delete slide";
+          try {
+            const data = await response.json();
+            errorMessage = data.message || errorMessage;
+          } catch (e) {
+            console.warn("Failed to parse JSON error response", e);
+          }
+          throw new Error(errorMessage);
+        }
+  
+        toast.success("categories deleted successfully");
+        navigator("/categories"); // Redirect to slide list page
+        
+      } catch (error) {
+        console.error("Delete error:", error);
+        toast.error("Error deleting slide: " + error.message);
+      }
+    };
   return (
     <div className="relative h-scree w-full mt-4 p-2  shadow-md " >
       <Link to={`/categories/create`} className="flex justify-end mb-2 rounded-full">
@@ -96,10 +127,12 @@ const Show = () => {
                     Edit
                   </Link>
                   <Link
-                    to={``}
+                    
                     className="font-medium text-red-600 dark:text-red-500 ml-3 hover:underline"
                   >
-                    Delete
+                    <button onClick={() => handleDelete(category.id)}>
+                        Delete
+                      </button>
                   </Link>
                 </td>
               </tr>

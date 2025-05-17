@@ -80,28 +80,36 @@ const Edit = () => {
       formData.append("brands", data.brands); // Corrected from data.brand to data.brands
       formData.append("status", data.status);
       formData.append("is_feature", data.is_feature);
-      formData.append("_method", 'put');
+      formData.append("_method", "put");
       // Append image if available
       if (document.getElementById("imageInput").files[0]) {
-        formData.append("image", document.getElementById("imageInput").files[0]);
+        formData.append(
+          "image",
+          document.getElementById("imageInput").files[0]
+        );
       }
 
       formData.append("short_description", data.short_description);
       formData.append("description", data.description);
       formData.append("quantity", data.quantity);
 
-      const response = await axios.post(`${apiUrl}/products/${param.id}`, formData, {
-        headers: {
-          'Content-Type': "multipart/form-data",
-          Authorization: `Bearer ${adminToken()}`,
-        },
-      });
+      const response = await axios.post(
+        `${apiUrl}/products/${param.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${adminToken()}`,
+          },
+        }
+      );
 
       const result = response.data; // Access response.data instead of response.json()
       console.log(result);
 
       setDisable(false);
-      if (response.status === 200) { // Check response.status for success
+      if (response.status === 200) {
+        // Check response.status for success
         toast.success("Product updated successfully");
         navigate("/products");
       } else {
