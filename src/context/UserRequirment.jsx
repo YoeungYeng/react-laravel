@@ -7,7 +7,8 @@ export const UserRequireAuth = ({ children }) => {
 
   // If user is not logged in, redirect to login page
   if (!user) {
-    return <Navigate to="/account/login" replace />;
+    return <Navigate to="/account/login " replace  />;
+
   }
 
   return children;

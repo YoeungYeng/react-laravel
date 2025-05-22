@@ -13,7 +13,7 @@ export const AuthUserProvider = ({ children }) => {
     localStorage.setItem("userInfo", JSON.stringify(userData)); // Store as string
   };
 
-  // Logout function
+// Logout function
   const logout = () => {
     setUser(null);
     localStorage.removeItem("userInfo");

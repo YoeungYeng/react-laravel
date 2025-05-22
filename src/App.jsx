@@ -37,6 +37,7 @@ import Favorite from "./fronted/page/Favorite";
 import { default as  ShowSlides} from "./pages/Slides";
 import { default as CreateSlides } from "./slides/Create";
 import { default as UpdateSlides } from "./slides/Update";
+import Setting from "./pages/Setting";
 function App() {
   return (
     <>
@@ -264,6 +265,14 @@ function App() {
             element={
               <AdminRequireAuth>
                 <OrderDetail />
+              </AdminRequireAuth>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <AdminRequireAuth>
+                <Setting />
               </AdminRequireAuth>
             }
           />

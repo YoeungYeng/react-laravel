@@ -1,25 +1,62 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Get admin info from localStorage and parse it (if exists)
   const storedAdmin = localStorage.getItem("adminInfo");
-  const [admin, setAdmin] = useState(storedAdmin ? JSON.parse(storedAdmin) : null);
+  const storedExpiresAt = localStorage.getItem("expiresAt");
 
-  // Login function
-  const login = (admin) => {
-    setAdmin(admin);
-    localStorage.setItem("adminInfo", JSON.stringify(admin)); // Store as string
+  const [admin, setAdmin] = useState(() => {
+    if (storedAdmin && storedExpiresAt) {
+      const now = new Date().getTime();
+      if (now < parseInt(storedExpiresAt)) {
+        return JSON.parse(storedAdmin);
+      } else {
+        localStorage.removeItem("adminInfo");
+        localStorage.removeItem("expiresAt");
+      }
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (admin && storedExpiresAt) {
+      const now = new Date().getTime();
+      const timeLeft = parseInt(storedExpiresAt) - now;
+
+      if (timeLeft > 0) {
+        const timer = setTimeout(() => {
+          logout();
+        }, timeLeft);
+
+        return () => clearTimeout(timer);
+      } else {
+        logout();
+      }
+    }
+  }, [admin]);
+
+  const login = (adminData) => {
+    setAdmin(adminData);
+    localStorage.setItem("adminInfo", JSON.stringify(adminData));
+
+    const expiresAt = new Date().getTime() + 60 * 60 * 1000; // 1 hour
+    localStorage.setItem("expiresAt", expiresAt);
+
+    const timer = setTimeout(() => {
+      logout();
+    }, 60 * 60 * 1000);
+
+    // Optional: Clear previous timer if needed
+    return () => clearTimeout(timer);
   };
 
-  // Logout function
   const logout = () => {
     setAdmin(null);
     localStorage.removeItem("adminInfo");
+    localStorage.removeItem("expiresAt");
   };
 
-  // Context value
   const value = { admin, login, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

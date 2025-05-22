@@ -7,17 +7,7 @@ const NavBar = () => {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // fetch api user
-  const fetchUser = async () => {
-    const response = await fetch("https://api.example.com/user", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    const data = await response.json();
-    return data;
-  }
+  
   return (
     <>
       <nav className=" border-gray-200  w-full">
@@ -27,7 +17,7 @@ const NavBar = () => {
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <img src={logo} className="h-8" alt="Flowbite Logo" />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap ">
+            <span className="self-center text-white text-2xl font-semibold whitespace-nowrap ">
               Small Team
             </span>
           </Link>
@@ -53,37 +43,32 @@ const NavBar = () => {
               >
                 <div className="px-4 py-2">
                   <span className="block text-sm text-gray-900 dark:text-white">
-                    Bonnie Green
+                    Small Team
                   </span>
                   <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                    name@flowbite.com
+                    smallteam760@gmail.com
                   </span>
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="/"
+                      
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >
                       Dashboard
-                    </a>
+                    </Link>
+                      
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to={"/settings"}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >
                       Settings
-                    </a>
+                    </Link>
                   </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      Earnings
-                    </a>
-                  </li>
+                  
                   <li>
                     <button
                       onClick={logout}
