@@ -1,11 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../assets/elogo.png";
+
+import { adminToken, apiUrl } from "./htpds";
+import Loading from "./Loading";
+
 
 const SideLefe = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const location = useLocation(); // Get the current route
 
+  const [product, setProduct] = useState([]);
+
+  const fetchLogo = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${apiUrl}/settings`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${adminToken()}`,
+        },
+      });
+
+      const result = await response.json();
+      console.log("Result:", result);
+
+      setLoading(false);
+      if (result.status === 200) {
+        setProduct(result.data);
+        console.log("Categories:", result.data);
+      } else {
+        console.log("Fetch Categories Error:", result.message);
+      }
+    } catch (error) {
+      console.error("Fetch Categories Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLogo();
+  }, []);
   return (
     <>
       {/* Toggle Sidebar Button */}
@@ -39,10 +75,17 @@ const SideLefe = () => {
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
           <Link to={"/"} className="flex items-center ps-2.5 mb-5">
-            <img src={logo} className="h-6 me-3 sm:h-7" alt="Logo" />
-            <span className="self-center text-xl font-semibold dark:text-white">
-              Small Team
-            </span>
+            {loading ? (
+              <Loading />
+            ) : (
+              <div className="flex items-center">
+                <img src={`${product.logo}`} className="h-6 me-3 sm:h-7"
+                alt="Logo" />
+                <span className="self-center text-xl font-semibold dark:text-white">
+                  {product.title}
+                </span>
+              </div>
+            )}
           </Link>
           <ul className="space-y-2 font-medium">
             {[
@@ -50,12 +93,12 @@ const SideLefe = () => {
               { name: "Categories", path: "/categories" },
               { name: "Brands", path: "/brands" },
               { name: "Users", path: "/users" },
-              { name: "slide", path: "/slides" },
+              { name: "Slide", path: "/slides" },
+              { name: "Footer", path: "/footer" },
               { name: "Products", path: "/products" },
               { name: "Orders", path: "/orders" },
-              
+
               { name: "Settings", path: "/settings" },
-              
             ].map((item) => (
               <li key={item.path}>
                 <Link

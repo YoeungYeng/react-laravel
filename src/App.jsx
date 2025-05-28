@@ -38,6 +38,8 @@ import { default as  ShowSlides} from "./pages/Slides";
 import { default as CreateSlides } from "./slides/Create";
 import { default as UpdateSlides } from "./slides/Update";
 import Setting from "./pages/Setting";
+import Footer from "./pages/Footer";
+import { default as CreatFooter } from "./footer/Create";
 function App() {
   return (
     <>
@@ -273,6 +275,23 @@ function App() {
             element={
               <AdminRequireAuth>
                 <Setting />
+              </AdminRequireAuth>
+            }
+          />
+          {/* footer */}
+          <Route
+            path="/footer"
+            element={
+              <AdminRequireAuth>
+                <Footer />
+              </AdminRequireAuth>
+            }
+          />
+          <Route
+            path="/footer/create"
+            element={
+              <AdminRequireAuth>
+                <CreatFooter />
               </AdminRequireAuth>
             }
           />

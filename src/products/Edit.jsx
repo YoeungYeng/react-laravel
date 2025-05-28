@@ -69,51 +69,53 @@ const Edit = () => {
 
   const onSubmit = async (data) => {
     try {
-      setDisable(true);
+      setDisable(true); // Disable the form to prevent double submission
 
       const formData = new FormData();
 
-      // Append data from the 'data' object passed to onSubmit
+      // Append form fields
       formData.append("title", data.title);
       formData.append("price", data.price);
       formData.append("category", data.category);
-      formData.append("brands", data.brands); // Corrected from data.brand to data.brands
+      formData.append("brands", data.brands);
       formData.append("status", data.status);
       formData.append("is_feature", data.is_feature);
-      formData.append("_method", "put");
-      // Append image if available
-      if (document.getElementById("imageInput").files[0]) {
-        formData.append(
-          "image",
-          document.getElementById("imageInput").files[0]
-        );
-      }
-
       formData.append("short_description", data.short_description);
       formData.append("description", data.description);
       formData.append("quantity", data.quantity);
 
+      // Laravel method spoofing for PUT
+      formData.append("_method", "PUT");
+
+      // Append image if selected
+      const imageFile = document.getElementById("imageInput")?.files?.[0];
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
+
+      // Send the request
       const response = await axios.post(
         `${apiUrl}/products/${param.id}`,
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${adminToken()}`,
+            Accept: "application/json",
+            // NOTE: Do NOT set Content-Type manually; Axios sets it automatically for FormData
           },
+          withCredentials: true, // Use this if dealing with cookies/session
         }
       );
 
-      const result = response.data; // Access response.data instead of response.json()
-      console.log(result);
-
+      const result = response.data;
       setDisable(false);
+
+      // Check if update was successful
       if (response.status === 200) {
-        // Check response.status for success
         toast.success("Product updated successfully");
         navigate("/products");
       } else {
-        // Handle server-side validation errors if present
+        // Handle validation errors or custom error messages
         if (result && result.errors) {
           let errorMessage = "";
           for (const field in result.errors) {
@@ -126,8 +128,23 @@ const Edit = () => {
       }
     } catch (error) {
       console.error("Submission Error:", error);
-      toast.error("An unexpected error occurred. Please try again.");
       setDisable(false);
+
+      // Axios error handling
+      if (error.response) {
+        const result = error.response.data;
+        if (result && result.errors) {
+          let errorMessage = "";
+          for (const field in result.errors) {
+            errorMessage += `${field}: ${result.errors[field].join(", ")}\n`;
+          }
+          toast.error(errorMessage || "Update failed.");
+        } else {
+          toast.error(result.message || "Update failed.");
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
