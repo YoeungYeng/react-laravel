@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 import { adminToken, apiUrl } from "./htpds";
+import logo from "../assets/elogo.png"; // Adjust the path as necessary
 
 import Loading from "./Loading";
 
@@ -54,9 +55,9 @@ const Footer = () => {
                 </div>
               ) : (
                 <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                  <img src={product.logo} className="h-8" alt="Flowbite Logo" />
+                  <img src={product?.logo || logo} className="h-8" alt="Flowbite Logo" />
                   <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                    {product.title}
+                    {product?.title || "Small Team"}
                   </span>
                 </div>
               )}
@@ -88,7 +89,7 @@ const Footer = () => {
           <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2023{" "}
             <Link to={product?.link} className="hover:underline text-red-500">
-              {product?.title}
+              {product?.title || "Small Team"}
             </Link>
             . All Rights Reserved.
           </span>

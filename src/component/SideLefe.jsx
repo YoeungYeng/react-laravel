@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-
 import { adminToken, apiUrl } from "./htpds";
 import Loading from "./Loading";
+import logo from "../assets/elogo.png"; // Adjust the path as necessary
 
-
-const SideLefe = () => {
+const SideLeft = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const location = useLocation(); // Get the current route
-
   const [product, setProduct] = useState([]);
+  const location = useLocation();
 
   const fetchLogo = async () => {
     try {
@@ -25,23 +23,24 @@ const SideLefe = () => {
       });
 
       const result = await response.json();
-      console.log("Result:", result);
-
       setLoading(false);
+
       if (result.status === 200) {
         setProduct(result.data);
-        console.log("Categories:", result.data);
+        console.log("Settings:", result.data);
       } else {
-        console.log("Fetch Categories Error:", result.message);
+        console.log("Fetch Settings Error:", result.message);
       }
     } catch (error) {
-      console.error("Fetch Categories Error:", error);
+      setLoading(false);
+      console.error("Fetch Settings Error:", error);
     }
   };
 
   useEffect(() => {
     fetchLogo();
   }, []);
+
   return (
     <>
       {/* Toggle Sidebar Button */}
@@ -56,7 +55,6 @@ const SideLefe = () => {
           aria-hidden="true"
           fill="currentColor"
           viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             clipRule="evenodd"
@@ -74,19 +72,23 @@ const SideLefe = () => {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
-          <Link to={"/"} className="flex items-center ps-2.5 mb-5">
+          <Link to="/" className="flex items-center ps-2.5 mb-5">
             {loading ? (
               <Loading />
             ) : (
               <div className="flex items-center">
-                <img src={`${product?.logo}`} className="h-6 me-3 sm:h-7"
-                alt="Logo" />
-                <span className="self-center text-xl font-semibold dark:text-white">
-                  {product?.title}
+                <img
+                  src={product?.logo || logo}
+                  className="h-6 me-3 sm:h-7"
+                  alt="Logo"
+                />
+                <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+                  {product?.title || "App Title"}
                 </span>
               </div>
             )}
           </Link>
+
           <ul className="space-y-2 font-medium">
             {[
               { name: "Dashboard", path: "/" },
@@ -97,7 +99,6 @@ const SideLefe = () => {
               { name: "Footer", path: "/footer" },
               { name: "Products", path: "/products" },
               { name: "Orders", path: "/orders" },
-
               { name: "Settings", path: "/settings" },
             ].map((item) => (
               <li key={item.path}>
@@ -120,4 +121,4 @@ const SideLefe = () => {
   );
 };
 
-export default SideLefe;
+export default SideLeft;

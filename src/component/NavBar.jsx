@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { adminToken, apiUrl } from "./htpds";
 import Loading from "./Loading";
+import logo from "../assets/elogo.png"; // Adjust the path as necessary
 const NavBar = () => {
   const { logout } = useContext(AuthContext);
 
@@ -56,12 +57,12 @@ const NavBar = () => {
             ) : (
               <div className="flex items-center space-x-3 rtl:space-x-reverse">
                 <img
-                  src={`${product?.logo}`}
+                  src={`${product?.logo || logo}`}
                   className="h-8"
                   alt="Flowbite Logo"
                 />
                 <span className="self-center text-white text-2xl font-semibold whitespace-nowrap ">
-                  {product?.title}
+                  {product?.title || "My Product"}
                 </span>
               </div>
             )}
@@ -82,7 +83,7 @@ const NavBar = () => {
               ) : (
                 <img
                   className="w-8 h-8 rounded-full"
-                  src={product.logo}
+                  src={product?.logo || logo}
                   alt="user photo"
                 />
               )}
@@ -94,7 +95,7 @@ const NavBar = () => {
               >
                 <div className="px-4 py-2">
                   <span className="block text-sm text-gray-900 dark:text-white">
-                    {product.title}
+                    {product.title || "My Product"}
                   </span>
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
