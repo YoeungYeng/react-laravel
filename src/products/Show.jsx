@@ -128,7 +128,7 @@ const Show = () => {
                         <img
                           src={prod.image}
                           alt="Product"
-                          className="w-12 h-12 object-cover rounded"
+                          className="w-12 h-12 object-contain rounded"
                         />
                       ) : (
                         "No Image"

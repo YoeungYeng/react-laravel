@@ -56,12 +56,12 @@ const NavBar = () => {
             ) : (
               <div className="flex items-center space-x-3 rtl:space-x-reverse">
                 <img
-                  src={`${product.logo}`}
+                  src={`${product?.logo}`}
                   className="h-8"
                   alt="Flowbite Logo"
                 />
                 <span className="self-center text-white text-2xl font-semibold whitespace-nowrap ">
-                  {product.title}
+                  {product?.title}
                 </span>
               </div>
             )}

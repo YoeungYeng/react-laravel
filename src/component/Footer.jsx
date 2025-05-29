@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import logo from "../assets/react.svg";
+
 import { Link } from "react-router-dom";
 import { adminToken, apiUrl } from "./htpds";
-import { div } from "framer-motion/client";
+
 import Loading from "./Loading";
 
 const Footer = () => {
@@ -87,8 +87,8 @@ const Footer = () => {
           <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
           <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2023{" "}
-            <Link to={product.link} className="hover:underline text-red-500">
-              {product.title}
+            <Link to={product?.link} className="hover:underline text-red-500">
+              {product?.title}
             </Link>
             . All Rights Reserved.
           </span>

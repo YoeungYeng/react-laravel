@@ -6,11 +6,12 @@ import { useForm } from "react-hook-form";
 import { adminToken, apiUrl } from "../component/htpds";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import noImage from "../assets/camera.png"; // Default image if no logo is set
 
 const Setting = () => {
   const [disable, setDisable] = useState(false);
   const [image, setImage] = useState(null); // File object
-  const [imagePreview, setImagePreview] = useState(null); // URL for preview
+  const [imagePreview, setImagePreview] = useState(noImage); // URL for preview
   const navigate = useNavigate();
 
   const {

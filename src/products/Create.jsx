@@ -6,12 +6,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { adminToken, apiUrl } from "../component/htpds";
 import { toast } from "react-toastify";
+import noImage from "../assets/camera.png"; // Default image if no logo is set
+
+
 
 const Create = () => {
   
   const [disable, setDisable] = useState(false);
   const [image, setImage] = useState(null);
-  
+  const [imagePreview, setImagePreview] = useState(noImage);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const navigate = useNavigate();
@@ -28,6 +31,7 @@ const Create = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
+        setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -317,19 +321,19 @@ const Create = () => {
 
                 {/* Image Upload */}
                 <label htmlFor="image">Image</label>
-                <div className="mb-4 relative border-2 border-gray-500 cursor-pointer w-[100px] h-[100px]">
-                  {image && (
+                <div className="mb-4 relative border-2 p-1 cursor-pointer w-[100px] h-[100px]">
+                  {imagePreview && (
                     <img
-                      src={image}
+                      src={imagePreview}
                       alt="uploaded"
-                      className="rounded-sm object-cover w-full h-full"
+                      className="rounded-sm object-contain  w-[90px] h-[90px] "
                     />
                   )}
                   <input
                     type="file"
                     id="image"
                     onChange={handleImageChange}
-                    className="opacity-0 w-full h-full cursor-pointer"
+                    className="opacity-0 w-[90px] h-[90px]  absolute top-0 left-0 cursor-pointer"
                   />
                 </div>
 

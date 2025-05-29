@@ -79,10 +79,10 @@ const SideLefe = () => {
               <Loading />
             ) : (
               <div className="flex items-center">
-                <img src={`${product.logo}`} className="h-6 me-3 sm:h-7"
+                <img src={`${product?.logo}`} className="h-6 me-3 sm:h-7"
                 alt="Logo" />
                 <span className="self-center text-xl font-semibold dark:text-white">
-                  {product.title}
+                  {product?.title}
                 </span>
               </div>
             )}

@@ -13,7 +13,7 @@ const Show = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${apiUrl}/categories`, {
+      const response = await fetch(`${apiUrl}/footer`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -42,56 +42,72 @@ const Show = () => {
   }, []);
 
   const handleDelete = async (id) => {
-      try {
-        const response = await fetch(`${apiUrl}/categories/${id}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${adminToken()}`, // Make sure adminToken() returns a valid string
-          },
-        });
-  
-        if (!response.ok) {
-          let errorMessage = "Failed to delete slide";
-          try {
-            const data = await response.json();
-            errorMessage = data.message || errorMessage;
-          } catch (e) {
-            console.warn("Failed to parse JSON error response", e);
-          }
-          throw new Error(errorMessage);
+    try {
+      const response = await fetch(`${apiUrl}/categories/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${adminToken()}`, // Make sure adminToken() returns a valid string
+        },
+      });
+
+      if (!response.ok) {
+        let errorMessage = "Failed to delete slide";
+        try {
+          const data = await response.json();
+          errorMessage = data.message || errorMessage;
+        } catch (e) {
+          console.warn("Failed to parse JSON error response", e);
         }
-  
-        toast.success("categories deleted successfully");
-        navigator("/categories"); // Redirect to slide list page
-        
-      } catch (error) {
-        console.error("Delete error:", error);
-        toast.error("Error deleting slide: " + error.message);
+        throw new Error(errorMessage);
       }
-    };
+
+      toast.success("categories deleted successfully");
+      navigator("/categories"); // Redirect to slide list page
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("Error deleting slide: " + error.message);
+    }
+  };
   return (
-    <div className="relative h-scree w-full mt-4 p-2  shadow-md " >
-      <Link to={`/footer/create`} className="flex justify-end mb-2 rounded-full">
+    <div className="relative h-scree w-full mt-4 p-2  shadow-md ">
+      <Link
+        to={`/footer/create`}
+        className="flex justify-end mb-2 rounded-full"
+      >
         <button className="bg-blue-500 w-[120px] mb-2 p-2 rounded-sm text-white">
           {" "}
           Create{" "}
         </button>
       </Link>
-      {loading == true &&  <div className="flex justify-center w-full h-full items-center"><Loading /></div> }
+      {loading == true && (
+        <div className="flex justify-center w-full h-full items-center">
+          <Loading />
+        </div>
+      )}
       {loading == false && categories.length == 0 && (
-        <p> category not found </p>
+        <p className="text-center text-red-600 p-2 text-[20px]">
+          {" "}
+          Footer not found{" "}
+        </p>
       )}
       {categories && categories.length > 0 && (
         <table className="w-full overflow-x-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Category
+                Name
+              </th>
+              
+              <th scope="col" className="px-6 py-3">
+                Link
               </th>
               <th scope="col" className="px-6 py-3">
-                Status
+                Icons
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Copyright
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -99,52 +115,59 @@ const Show = () => {
             </tr>
           </thead>
           <tbody>
-          {categories && categories.length > 0 ? (
-            categories.map((category) => (
-              <tr
-                key={category.id}
-                className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
-              >
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            {categories && categories.length > 0 ? (
+              categories.map((category) => (
+                <tr
+                  key={category.id}
+                  className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
                 >
-                  {category.name}
-                </th>
-
-                <td className="px-6 py-4 ">
-                  <div className="w-[90px] bg-lime-500 text-center rounded-full">
-                    <span className="  text-white p-6   text-center">
-                      Active
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <Link
-                    to={`/footer/edit/${category.id}`}
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    Edit
-                  </Link>
-                  <Link
-                    
-                    className="font-medium text-red-600 dark:text-red-500 ml-3 hover:underline"
+                    {category.name}
+                  </th>
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    <button onClick={() => handleDelete(category.id)}>
+                    {category.link}
+                  </th>
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    <img src={category.icon} className="w-[40px] h-auto object-contain" alt={category.icon} />
+                  </th>
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {category.copy_right}
+                  </th>
+                  
+                  <td className="px-6 py-4">
+                    <Link
+                      to={`/footer/edit/${category.id}`}
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      Edit
+                    </Link>
+                    <Link className="font-medium text-red-600 dark:text-red-500 ml-3 hover:underline">
+                      <button onClick={() => handleDelete(category.id)}>
                         Delete
                       </button>
-                  </Link>
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td className="px-6 py-4 text-center" colSpan="3">
+                  No categories found.
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td className="px-6 py-4 text-center" colSpan="3">
-                No categories found.
-              </td>
-            </tr>
-          )}
-
+            )}
           </tbody>
         </table>
       )}
