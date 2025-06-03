@@ -28,12 +28,13 @@ const Show = () => {
       setLoading(false);
       if (result.status === 200) {
         setCategories(result.data);
-        console.log("Categories:", result.data);
+        console.log("footer:", result.data);
+        
       } else {
-        console.log("Fetch Categories Error:", result.message);
+        console.log("Fetch footer Error:", result.message);
       }
     } catch (error) {
-      console.error("Fetch Categories Error:", error);
+      console.error("Fetch footer Error:", error);
     }
   };
 
@@ -43,7 +44,7 @@ const Show = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`${apiUrl}/categories/${id}`, {
+      const response = await fetch(`${apiUrl}/footer/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -63,8 +64,8 @@ const Show = () => {
         throw new Error(errorMessage);
       }
 
-      toast.success("categories deleted successfully");
-      navigator("/categories"); // Redirect to slide list page
+      toast.success("footer deleted successfully");
+      navigator("/footer"); // Redirect to slide list page
     } catch (error) {
       console.error("Delete error:", error);
       toast.error("Error deleting slide: " + error.message);
